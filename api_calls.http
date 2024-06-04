@@ -1,0 +1,24 @@
+
+POST http://localhost:3765/API/music/create
+Content-Type: application/json
+
+{
+    "song_name": "love song",
+    "year_":"2008",
+    "artist":"Tyler-Swift"
+}
+
+###
+POST http://localhost:3765/API/music/create
+Content-Type: application/json
+
+{
+    "song_name": "tank",
+    "year_":"2019",
+    "artist":"the win"
+}
+
+###
+DELETE http://localhost:3765/API/music/delete/11
+Content-Type: application/json
+

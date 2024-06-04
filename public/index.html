@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music App</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs" defer></script>
+</head>
+<body>
+    <div x-data="app" x-init="init()">
+        <h1>Music List</h1>
+        <template x-if="loading">
+            <p>Loading music...</p>
+        </template>
+        <template x-if="error">
+            <p x-text="errorMessage"></p>
+        </template>
+        <ul>
+            <template x-for="song in music" :key="song.id">
+                <li x-text="song.name"></li>
+            </template>
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Alpine.data('app', () => {
+                return {
+                    music: [],
+                    loading: true,
+                    error: false,
+                    errorMessage: '',
+
+                    async init() {
+                        await this.fetchMusic();
+                    },
+                    async fetchMusic() {
+                        try {
+                            const response = await fetch('/api/music');
+                            if (!response.ok) {
+                                throw new Error('Failed to fetch music');
+                            }
+                            const data = await response.json();
+                            this.music = data.music;
+                        } catch (error) {
+                            this.error = true;
+                            this.errorMessage = error.message || 'An unknown error occurred';
+                            console.error(error);
+                        } finally {
+                            this.loading = false;
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
